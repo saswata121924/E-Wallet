@@ -4,27 +4,21 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Builder
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class UserCreateRequest {
 
     @NotBlank
-    private String name;
+    private String username;
 
     @Email
     @NotBlank
     private String email;
 
+    @NotBlank
+    private String password;
+
     private String contact;
 
-    public User to(){
-        return User.builder()
-                .name(this.name)
-                .email(this.email)
-                .contact(this.contact)
-                .build();
-    }
 }
