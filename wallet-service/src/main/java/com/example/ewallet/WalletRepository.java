@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface WalletRepository extends JpaRepository<Wallet, Integer> {
 
-    @Query(value = "select * from wallet where user_id = ?1", nativeQuery = true)
     Wallet findByUserId(int userId);
 
     @Transactional

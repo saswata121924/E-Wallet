@@ -63,5 +63,4 @@ public class WalletService {
         }
         kafkaTemplate.send(WALLET_UPDATE_TOPIC, walletUpdateEvent.toJSONString());
     }
-
 }

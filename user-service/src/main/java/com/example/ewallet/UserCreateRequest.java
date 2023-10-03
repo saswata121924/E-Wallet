@@ -7,18 +7,24 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class UserCreateRequest {
 
     @NotBlank
-    private String username;
+    private String name;
 
     @Email
     @NotBlank
     private String email;
 
-    @NotBlank
-    private String password;
-
     private String contact;
 
+    public User to() {
+        return User.builder()
+                .name(name)
+                .email(email)
+                .contact(contact)
+                .build();
+    }
 }

@@ -2,7 +2,6 @@ package com.example.ewallet;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,7 @@ public class TransactionController {
     TransactionService transactionService;
 
     @PostMapping("/transact")
-    public String createTime(@Valid @RequestBody TransactionCreateRequest transactionCreateRequest){
+    public String createTxn(@Valid @RequestBody TransactionCreateRequest transactionCreateRequest){
         String txnId = transactionService.createTxn(transactionCreateRequest.to());
         return  "Your transaction has been initiated, here is the transaction Id: "+txnId;
     }

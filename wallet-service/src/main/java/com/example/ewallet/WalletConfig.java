@@ -8,6 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Properties;
 
@@ -44,7 +45,7 @@ public class WalletConfig {
     }
 
     @Bean
-    ObjectMapper getMapper(){
-        return new ObjectMapper();
+    RestTemplate getTemplate(){
+        return new RestTemplate();
     }
 }

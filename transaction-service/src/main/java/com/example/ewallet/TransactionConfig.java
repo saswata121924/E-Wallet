@@ -38,30 +38,12 @@ public class TransactionConfig {
         return new KafkaTemplate<>(getProducerFactory());
     }
 
-    @Bean
-    ObjectMapper getMapper(){
-        return new ObjectMapper();
-    }
-
     Properties getConsumerConfig(){
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return properties;
-    }
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/transact").authenticated()
-                        .requestMatchers("/**").permitAll()
-                )
-                .formLogin(withDefaults())
-                .httpBasic(withDefaults());
-        return http.build();
     }
 
     @Bean
