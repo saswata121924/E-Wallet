@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,11 @@ import org.springframework.stereotype.Service;
 public class WalletService {
     @Value("${user.onboarding.amount}")
     Double amount;
+
+    private static final String PERSON_REDIS_STRING_KEY_PREFIX = "per::";
+
+    @Autowired
+    RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     KafkaTemplate<String, String> kafkaTemplate;
@@ -59,8 +65,18 @@ public class WalletService {
         else {
             walletRepository.updateWallet(receiverId, amount);
             walletRepository.updateWallet(senderId, 0 - amount);
+            redisTemplate.opsForValue().set(getUserKey(receiverId), getWallet(receiverId));
+            redisTemplate.opsForValue().set(getUserKey(senderId), getWallet(senderId));
             walletUpdateEvent.put("status", "SUCCESSFUL");
         }
         kafkaTemplate.send(WALLET_UPDATE_TOPIC, walletUpdateEvent.toJSONString());
+    }
+
+    public Wallet getWallet(int userId){
+        return walletRepository.findByUserId(userId);
+    }
+
+    private String getUserKey(Integer userId){
+        return PERSON_REDIS_STRING_KEY_PREFIX + userId;
     }
 }
